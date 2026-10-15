@@ -14,4 +14,7 @@ def get_llm(temperature: float = 0.2) -> ChatOpenAI:
         base_url=os.environ.get("LLM_BASE_URL", "https://openrouter.ai/api/v1"),
         api_key=api_key,
         temperature=temperature,
+        # Without a cap OpenRouter reserves the model's full output window (e.g. 65k
+        # tokens) against the credit balance and returns 402 on small accounts.
+        max_tokens=int(os.environ.get("LLM_MAX_TOKENS", "8000")),
     )
